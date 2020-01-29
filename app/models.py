@@ -6,11 +6,6 @@ from app import login
 from flask_admin.contrib.sqla import ModelView
 
 
-@login.user_loader
-def load_user(uid):
-    return User.query.get(int(uid))
-
-
 def get_user(email, password):
     try:
         user = User.objects.get(email=email)
@@ -65,6 +60,11 @@ class User(UserMixin, db.Model):
         return check_password_hash(u_hash, password)
 
 
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
+
 class HistoryUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -94,8 +94,8 @@ class HistoryUser(db.Model):
 class Objects(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uid = db.Column(db.Integer, db.ForeignKey('user.id'))
-    inputPhone = db.Column(db.String(15))
-    outputPhone = db.Column(db.String(15))
+    inputPhone = db.Column(db.String(20))
+    outputPhone = db.Column(db.String(20))
     price = db.Column(db.Float(5), default=0.0)
     name = db.Column(db.String(30))
     comment = db.Column(db.String(244))
